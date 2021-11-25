@@ -1,4 +1,4 @@
-web: gunicorn cafeapp.wsgi
+web: gunicorn fabcafe.wsgi
 release: python manage.py makemigrations --noinput
 release : python manage.py collectstatic --noinput
 release: python manage.py migrate --noinput
