@@ -9,7 +9,7 @@ User=get_user_model()
 # Create your views here.
 class CreateUserAPIView(generics.CreateAPIView):
     serializer_class = UserSerializer
-    # permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.AllowAny]
     def perform_create(self,serializer):
         serializer.save()
 
