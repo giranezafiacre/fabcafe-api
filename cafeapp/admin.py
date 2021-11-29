@@ -3,13 +3,14 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from cafeapp.models import Item, Order
+
 User = get_user_model()
 
 # Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
 
 class UserAdmin(BaseUserAdmin):
-    # The forms to add and change user instances
 
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
@@ -35,3 +36,5 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Item)
+admin.site.register(Order)
