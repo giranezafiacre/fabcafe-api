@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jw7969&txix0$jjw!!!2r=83nk@y(75_^0oa5bvh8)*0_$a*^l'
+SECRET_KEY = config('FLUTTERWAVE_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'fabcafe-api.herokuapp.com']
-
+ALLOWED_HOSTS = ['localhost', 'fabcafe-api.herokuapp.com','258a-102-22-167-136.ngrok.io']
+                                                           
 
 # Application definition
 
@@ -45,12 +46,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'drf_yasg',
+    'djangoflutterwave',
     # our app
     'cafeapp.apps.CafeappConfig',
 ]
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     'file:///C:/Users/Fiacre/Desktop/fabcafe%20dash/uena.dexignzone.com/xhtml/orders-list.html'
+#     # 'http://d05c-105-178-106-230.ngrok.io'
+# ]
+CORS_ORIGIN_ALLOW_ALL = True
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -64,7 +70,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'fabcafe.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -80,7 +85,15 @@ TEMPLATES = [
         },
     },
 ]
-
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'in': 'header',
+            'name': 'Authorization'
+        }
+    },
+}
 WSGI_APPLICATION = 'fabcafe.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -94,24 +107,13 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': 'fabcafe',
-
-        'USER': 'postgres',
-
-        'PASSWORD': 'nyagatoma',
-
-        'HOST': 'localhost',
-
-        'PORT': '5432',
-
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-DATABASES = {
-    'default': dj_database_url.config()
-}
+# DATABASES = {
+#     'default': dj_database_url.config()
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

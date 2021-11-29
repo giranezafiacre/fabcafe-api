@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from cafeapp.models import Item, Order
+from cafeapp.models import Item, Order, OrderItem, Table
 
 User = get_user_model()
 
@@ -15,12 +15,13 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ['phone', 'first_name','last_name','is_staff']
+    list_display = ['phone', 'fullname','is_staff']
     list_filter = ['admin']
     fieldsets = (
         (None, {'fields': ('phone', 'password')}),
-        ('Personal info', {'fields': ('first_name','last_name')}),
-        ('Permissions', {'fields': ('staff','admin','is_active')}),
+        ('Personal info', {'fields': ('fullname',)}),
+        ('Permissions', {'fields': ('staff','admin','is_active','trustworthy')}),
+        ('Images', {'fields': ('image',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -38,3 +39,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Item)
 admin.site.register(Order)
+admin.site.register(OrderItem)
+admin.site.register(Table)

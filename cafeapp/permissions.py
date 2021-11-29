@@ -23,7 +23,7 @@ class IsAdminOrReadOnly(BasePermission):
         if request.user.is_anonymous:
             return False
         return request.user.admin
-
+        
 class IsOrderOwnerOrReadOnly(BasePermission):
     message = 'not authorized'
 
@@ -35,3 +35,13 @@ class IsOrderOwnerOrReadOnly(BasePermission):
             
         return obj.user == request.user
 
+class IsOrderItemOwner(BasePermission):
+    message = 'not authorized'
+
+    def has_object_permission(self, request, view, obj):
+        my_methods = []
+
+        if request.method in my_methods:
+            return True
+            
+        return obj.cart.user == request.user
