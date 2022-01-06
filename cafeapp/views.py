@@ -43,14 +43,13 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserView(views.APIView):
-
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = UserSerializer
-    # def get_image(image):
-    #     with open(image,'rb') as f:
-    #         return (f.read(),content_type=)
     def get(self, request):
         user = request.user
         return response.Response({
+            'id':user.id,
             'fullname': user.fullname,
             'image': user.image.url,
             'staff':user.staff,
@@ -281,10 +280,20 @@ class tableDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class ListTableAPIView(generics.ListAPIView):
     authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+    serializer_class = tableSerializers
+    queryset = Table.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['requested_on']
+
+class ListUserTableAPIView(generics.ListAPIView):
+    authentication_classes = [authentication.SessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = tableSerializers
     queryset = Table.objects.all()
-
+    def get(self, request, *args, **kwargs):
+        data=Table.objects.filter(reserved_by=self.request.user)
+        return response
 
 @api_view(['POST'])
 def payment_response(request):
@@ -299,6 +308,6 @@ def payment_response(request):
                 if order.totalPay == request_json['amount']:
                     order.paid = True
                     order.save()
-            print(request_json, '\n___________________\norder:', order.paid)
+                print(request_json, '\n___________________\norder:', order.paid)
         print(request_json)
-        return response.Response(status=status.HTTP_200_OK)
+        return response.Response(data=request_json, status=status.HTTP_200_OK)

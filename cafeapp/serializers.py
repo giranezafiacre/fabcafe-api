@@ -107,9 +107,12 @@ class ItemSerializer(ModelSerializer):
         fields = "__all__"
 
 class tableSerializers(ModelSerializer):
+    username=serializers.CharField(source='reserved_by.fullname', read_only=True)
+    time_needed = models.DateTimeField(auto_now_add=False)
+    time_needed = serializers.DateTimeField(format=None,input_formats=['%Y-%m-%dT%H:%M:%SZ',])
     class Meta:
        model = Table
-       fields = "__all__"
+       fields = ['id','number_of_persons','reserved_by','availability','requested_on','time_needed','username']
     def validate(self, attrs):
         if not attrs:
             raise serializers.ValidationError({

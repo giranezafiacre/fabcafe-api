@@ -40,4 +40,8 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Item)
 admin.site.register(Order)
 admin.site.register(OrderItem)
-admin.site.register(Table)
+
+class TableAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Table._meta.fields]
+
+admin.site.register(Table, TableAdmin)
